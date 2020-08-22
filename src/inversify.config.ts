@@ -5,13 +5,14 @@ import { Bot } from './bot';
 import { CommandoClient } from 'discord.js-commando';
 import { PingFinder } from './services/ping-finder';
 import { MessageResponder } from './services/message-responder';
+import { prefix } from '../config';
 
 let container = new Container();
 
 container.bind<Bot>(TYPES.Bot).to(Bot).inSingletonScope();
 container.bind<CommandoClient>(TYPES.Client).toConstantValue(
   new CommandoClient({
-    commandPrefix: '?',
+    commandPrefix: prefix,
   })
 );
 container.bind<string>(TYPES.Token).toConstantValue(process.env.TOKEN);
