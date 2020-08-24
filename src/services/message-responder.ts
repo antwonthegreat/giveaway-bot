@@ -1,21 +1,17 @@
-import { Message } from 'discord.js';
-import { PingFinder } from './ping-finder';
+import { Message, Client } from 'discord.js';
+import { GiveawayService } from './giveaway-service';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../types';
 
 @injectable()
 export class MessageResponder {
-  private pingFinder: PingFinder;
+  private giveawayService: GiveawayService;
 
-  constructor(@inject(TYPES.PingFinder) pingFinder: PingFinder) {
-    this.pingFinder = pingFinder;
+  constructor(@inject(TYPES.GiveawayService) giveawayService: GiveawayService) {
+    this.giveawayService = giveawayService;
   }
 
-  handle(message: Message): Promise<Message | Message[]> {
-    if (this.pingFinder.isPing(message.content)) {
-      return message.reply('pong!');
-    }
-
-    return Promise.reject();
+  handle(message: Message, client: Client): Promise<boolean> {
+    return this.giveawayService.handle(message, client);
   }
 }
